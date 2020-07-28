@@ -10,20 +10,35 @@ color = {
     'blue' : (0, 0, 255), 
  }
 class Snake:
-    RADIUS = 10
- 
-    def draw(self, body):
+    def __init__(self):
+        global display_height
+        global display_width
+        self.RADIUS = 10
+        self.snakeBody = [ {'x':display_width//2-2*self.RADIUS*i ,'y': display_height//2, 'vel': 0} for i in range(0, 7)]
+    def draw(self):
         global win
-        for part in body:
-            pygame.draw.circle(win, (255, 0, 0), part, self.RADIUS)
+        for part in self.snakeBody:
+            pygame.draw.circle(win, (255, 0, 0), (part['x'], part['y']), self.RADIUS)
+    def erase(self):
+        global win
+        for part in self.snakeBody:
+            pygame.draw.circle(win, (0, 0, 0), (part['x'], part['y']), self.RADIUS)
+    def update_pos(self, vel):
+        for part in self.snakeBody:
+            part['vel'] = vel
+            part['x'] = part['x'] + part['vel']
 
 
 snake = Snake()
-snakeBody = [(display_width//2-2*Snake.RADIUS*i, display_height//2) for i in range(0, 7)]
-snake.draw(body)
+
+snake.draw()
+
 while not crashed:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
+    snake.erase()
+    snake.update_pos(1)
+    snake.draw()
     pygame.display.update()
 pygame.quit()
