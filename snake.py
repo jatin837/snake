@@ -12,19 +12,21 @@ class Snake:
     def __init__(self):
         self.turningPoints = []
         self.snakeBody = [{'x':convert(5 - i),'y':convert(2), 'vx':convert(1), 'vy':convert(0)} for i in range(4)]
-    def changeDirection(self, part, direction):
+    def changeDirection(self, i, direction):
         if direction == 'D':
-            part['vx'] = convert(0)
-            part['vy'] = convert(1)
+            self.snakeBody[i]['vx'] = convert(0)
+            self.snakeBody[i]['vy'] = convert(1)
         elif direction == 'R':
-            part['vx'] = convert(1)
-            part['vy'] = convert(0)
+            self.snakeBody[i]['vx'] = convert(1)
+            self.snakeBody[i]['vy'] = convert(0)
         elif direction == 'U':
-            part['vx'] = convert(0)
-            part['vy'] = convert(-1)
+            self.snakeBody[i]['vx'] = convert(0)
+            self.snakeBody[i]['vy'] = convert(-1)
         elif direction == 'L':
-            part['vx'] = convert(-1)
-            part['vy'] = convert(0)
+            self.snakeBody[i]['vx'] = convert(-1)
+            self.snakeBody[i]['vy'] = convert(0)
+        if i == len(self.snakeBody) - 1:
+            del(self.turningPoints[0])
     def draw(self):
         global win
         for part in self.snakeBody:           
@@ -34,13 +36,13 @@ class Snake:
         for part in self.snakeBody:
             pygame.draw.rect(win, (0, 0, 0), rect(part['x'], part['y']))
     def update_pos(self):
-        for part in self.snakeBody:
+        for i, c in enumerate(self.snakeBody):
             for tp in self.turningPoints:
-                if part['x'] == tp['x'] and part['y'] == tp['y']:
-                    self.changeDirection(part, tp['direction'])
+                if c['x'] == tp['x'] and c['y'] == tp['y']:
+                    self.changeDirection(i, tp['direction'])
                 
-            part['x'] += part['vx']
-            part['y'] += part['vy']
+            c['x'] += c['vx']
+            c['y'] += c['vy']
 
             
 
@@ -52,9 +54,9 @@ snake.draw()
 i = len(snake.snakeBody) - 1
 while not crashed:
     clock.tick(10)
-    # for i in range(1, display_height):
-	#     pygame.draw.line(win, (225, 225, 225), (convert(i), 0), (convert(i), display_height))
-	#     pygame.draw.line(win, (225, 225, 225), (0, convert(i)), (display_height, convert(i)))
+    for i in range(1, display_height):
+	    pygame.draw.line(win, (225, 225, 225), (convert(i), 0), (convert(i), display_height))
+	    pygame.draw.line(win, (225, 225, 225), (0, convert(i)), (display_height, convert(i)))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
