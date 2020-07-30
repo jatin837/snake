@@ -1,45 +1,58 @@
 import pygame 
 pygame.init
-display_width = 800
-display_height = 600
+display_width = 500
+display_height = 500
 win = pygame.display.set_mode((display_width, display_height))
 crashed = False
-color = {
-    'red':(255, 0, 0),
-    'green': (0, 255, 0), 
-    'blue' : (0, 0, 255), 
- }
+gridWidth = 25 
+convert = lambda j: j*gridWidth
+
+rect = lambda x, y: pygame.Rect(x, y, gridWidth, gridWidth)
 class Snake:
     def __init__(self):
-        self.RADIUS = 10
-        self.snakeBody = [ {'x':display_width//2-2*self.RADIUS*i ,'y': display_height//2, 'vx': 2*self.RADIUS, 'vy':0} for i in range(0, 7)]
+        self.snakeBody = [{'x':convert(5 - i),'y':convert(2), 'vx':convert(1), 'vy':convert(0)} for i in range(4)]
     def draw(self):
         global win
         for part in self.snakeBody:           
-            pygame.draw.circle(win, (255, 0, 0), (part['x'], part['y']), self.RADIUS)
+            pygame.draw.rect(win, (0, 244, 0), rect(part['x'], part['y']))
     def erase(self):
         global win
         for part in self.snakeBody:
-            pygame.draw.circle(win, (0, 0, 0), (part['x'], part['y']), self.RADIUS)
- 
+            pygame.draw.rect(win, (0, 0, 0), rect(part['x'], part['y']))
+    def update_pos(self):
+        for part in self.snakeBody:
+            part['x'] += part['vx']
+            part['y'] += part['vy']
+	
 
+i = -1
 clock = pygame.time.Clock()
 snake = Snake()
-
 snake.draw()
-i = 0
+turning = False
 while not crashed:
     clock.tick(2)
+    # for i in range(1, display_height):
+	#     pygame.draw.line(win, (225, 225, 225), (convert(i), 0), (convert(i), display_height))
+	#     pygame.draw.line(win, (225, 225, 225), (0, convert(i)), (display_height, convert(i)))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
     snake.erase()
     keys = pygame.key.get_pressed()
-    if keys['K_DOWN']:
-        i = len(snake.snakeBody)
-    for part in snake.snakeBody:
-        part['x'] = part['x'] + part['vx']
-        part['y'] = part['y'] + part['vy']
+    if keys[pygame.K_DOWN] and not turning:
+        turning = True
+        i = len(snake.snakeBody) - 1
+
+    while turning:
+        if i >=0:
+            snake.snakeBody[i]['vx'] = convert(0)
+            snake.snakeBody[i]['vy'] = convert(1)
+            i -= 1
+        else:
+            turning = False
+    
+    snake.update_pos()
     snake.draw()
     pygame.display.update()
 pygame.quit()
