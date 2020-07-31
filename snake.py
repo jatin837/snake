@@ -10,7 +10,7 @@ rect = lambda x, y: pygame.Rect(x, y, gridWidth, gridWidth)
 class Snake:
     def __init__(self):
         self.turningPoints = []
-        self.snakeBody = [{'x':convert(5 - i),'y':convert(2), 'vx':convert(1), 'vy':convert(0)} for i in range(5)]
+        self.snakeBody = [{'x':convert(15 - i),'y':convert(2), 'vx':convert(1), 'vy':convert(0)} for i in range(19)]        
     def changeDirection(self, i, direction):
         if direction == 'D':
             self.snakeBody[i]['vx'] = convert(0)
@@ -36,29 +36,24 @@ class Snake:
             pygame.draw.rect(win, (0, 0, 0), rect(part['x'], part['y']))
     def update_pos(self):
         global display_width
-        for i, c in enumerate(self.snakeBody):
-            
+        global crashed
+        for i, c in enumerate(self.snakeBody):          
             for tp in self.turningPoints:
                 if c['x'] == tp['x'] and c['y'] == tp['y']:
-                    self.changeDirection(i, tp['direction'])
-                
+                    self.changeDirection(i, tp['direction'])               
             c['x'] += c['vx']
             c['y'] += c['vy']
-
             if c['x'] == convert(20):
-                print('reset to x = 0')
                 c['x'] = 0
             elif c['x'] == convert(-1):
-                print('reset to x = max - 1')
                 c['x'] = convert(19)
             elif c['y'] == convert(-1):
-                print('reset to y = max - 1')
                 c['y'] = convert(19)
             elif c['y'] == convert(20):
-                print('reset to y = 0')
                 c['y'] = convert(0)
-        print(f"{snake.snakeBody[0]['x']}, {snake.snakeBody[0]['y']}")
-
+            if i > 0 and c['x'] == self.snakeBody[0]['x'] and c['y'] == self.snakeBody[0]['y']:
+                crashed = True
+       
 clock = pygame.time.Clock()
 snake = Snake()
 snake.draw()
@@ -86,3 +81,4 @@ while not crashed:
     snake.draw()
     pygame.display.update()
 pygame.quit()
+print('well played')
