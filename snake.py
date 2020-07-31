@@ -29,7 +29,7 @@ class Snake:
     def draw(self):
         global win
         for part in self.snakeBody:           
-            pygame.draw.rect(win, (0, 244, 0), rect(part['x'], part['y']))
+            pygame.draw.rect(win, (255, 244, 255), rect(part['x'], part['y']))
     def erase(self):
         global win
         for part in self.snakeBody:
@@ -37,40 +37,35 @@ class Snake:
     def update_pos(self):
         global display_width
         for i, c in enumerate(self.snakeBody):
-            if c['x'] == convert(19):
-                print('reset to x = 0')
-                c['x'] = -25
-            elif c['x'] == convert(-1):
-                print('reset to x = max - 1')
-                c['x'] = convert(20)
-            elif c['y'] == convert(0):
-                print('reset to y = max - 1')
-                c['y'] = 500
-            elif c['y'] == display_width/25:
-                print('reset to y = 0')
-                c['y'] = convert(0)
+            
             for tp in self.turningPoints:
                 if c['x'] == tp['x'] and c['y'] == tp['y']:
                     self.changeDirection(i, tp['direction'])
                 
             c['x'] += c['vx']
             c['y'] += c['vy']
+
+            if c['x'] == convert(20):
+                print('reset to x = 0')
+                c['x'] = 0
+            elif c['x'] == convert(-1):
+                print('reset to x = max - 1')
+                c['x'] = convert(19)
+            elif c['y'] == convert(-1):
+                print('reset to y = max - 1')
+                c['y'] = convert(19)
+            elif c['y'] == convert(20):
+                print('reset to y = 0')
+                c['y'] = convert(0)
         print(f"{snake.snakeBody[0]['x']}, {snake.snakeBody[0]['y']}")
-    # def reset(self, i, new_pos, d):
-    #     if d == 'x':
-    #         self.snakeBody[i]['x'] = new_pos
-    #     elif d == 'y':
-    #         self.snakeBody[i]['y'] = new_pos
 
 clock = pygame.time.Clock()
 snake = Snake()
 snake.draw()
 
-
 i = len(snake.snakeBody) - 1
 while not crashed:
-    clock.tick(1)
-
+    clock.tick(10)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
