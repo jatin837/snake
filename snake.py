@@ -37,7 +37,7 @@ class Snake:
         global win
         for part in self.snakeBody:
             pygame.draw.rect(win, (255, 0, 0), rect(part.x, part.y))
-            print(self.snakeBody[-1].x, self.snakeBody[-1].y)
+            
     def erase(self):
         global win
         for part in self.snakeBody:
@@ -83,21 +83,21 @@ food = Food(convert(16), convert(17), 0, 0, (0, 255, 0), False)
 food.draw()
 i = len(snake.snakeBody) - 1
 while not crashed:
-    clock.tick(10)
+    clock.tick(15)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
     snake.erase()
     food.is_eaten(snake.snakeBody[0])
     if food.eaten == True:
-        print(f'initial length = {len(snake.snakeBody)}')
+        
         x = snake.snakeBody[len(snake.snakeBody) - 1].x
         y = snake.snakeBody[len(snake.snakeBody) - 1].y
         vx = snake.snakeBody[len(snake.snakeBody) - 1].vx
         vy = snake.snakeBody[len(snake.snakeBody) - 1].vy
-        snake.snakeBody.append(Cube(x, y, vx, vy))
+        snake.snakeBody.append(Cube(x-vx, y-vy, vx, vy))
 
-        print(f'new length = {len(snake.snakeBody)}')
+        
         for i in range(20):
             for j in range(20):
                 if (i, j) not in [(snake.snakeBody[k].x/gridWidth, snake.snakeBody[k].y/gridWidth) for k in range(len(snake.snakeBody))]:
@@ -124,6 +124,7 @@ while not crashed:
 
     snake.update_pos()
     snake.draw()
+    print(f"points:{len(snake.snakeBody)-2}")
     pygame.display.update()
 pygame.quit()
 print('well played')
