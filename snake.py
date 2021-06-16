@@ -23,10 +23,22 @@ rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
 AVAILABLE:list = []
 clock = pygame.time.Clock()
 
-def _add_data(headPos, foodPos, length, direction, status):
+def _add_data():
     DATA_FILE:str = os.path.abspath('./snake.dat.json')
-    json.loads(DATA_FILE)
+    with open(DATA_FILE, 'r') as f:
+        # adding dummy data to test
+        data = json.load(f)
+        data["headPos"].append([9, 5])
+        data["foodPos"].append([1, 4])
+        data["length"].append(3)
+        data["direction"].append("Down")
+        data["status"].append("alive")
 
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f, indent = 4)
+
+
+_add_data()
 class Body:
     def __init__(self, x, y, vx, vy):
         self.x = x
