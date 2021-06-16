@@ -1,19 +1,25 @@
 import pygame
 import numpy as np
+
 pygame.init
-display_width = 500
-display_height = 500
-win = pygame.display.set_mode((display_width, display_height))
-crashed = False
-gridWidth = 25
-convert = lambda j: j*gridWidth
-rect = lambda x, y: pygame.Rect(x, y, gridWidth, gridWidth)
+
+DISPLAY_WIDTH:int = 500
+DISPLAY_HEIGHT:int = 500
+
+WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+
+CRASHED:bool = False
+GRIDWIDTH:int = 25
+convert = lambda j: j*GRIDWIDTH
+rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
+
 class Cube:
     def __init__(self, x, y, vx, vy):
         self.x = x
         self.y = y
         self.vx = vx
         self.vy = vy
+
 class Snake:
     def __init__(self):
         self.turningPoints = []
@@ -34,17 +40,17 @@ class Snake:
         if i == len(self.snakeBody) - 1:
             del(self.turningPoints[0])
     def draw(self):
-        global win
+        global WIN
         for part in self.snakeBody:
-            pygame.draw.rect(win, (255, 0, 0), rect(part.x, part.y))
+            pygame.draw.rect(WIN, (255, 0, 0), rect(part.x, part.y))
             
     def erase(self):
-        global win
+        global WIN
         for part in self.snakeBody:
-            pygame.draw.rect(win, (0, 0, 0), rect(part.x, part.y))
+            pygame.draw.rect(WIN, (0, 0, 0), rect(part.x, part.y))
     def update_pos(self):
-        global display_width
-        global crashed
+        global DISPLAY_WIDTH
+        global CRASHED
         for i, c in enumerate(self.snakeBody):
             for tp in self.turningPoints:
                 if c.x == tp['x'] and c.y == tp['y']:
@@ -61,7 +67,7 @@ class Snake:
                 c.y = convert(0)
             if i > 0 and c.x == self.snakeBody[0].x and c.y == self.snakeBody[0].y:
 
-                crashed = True
+                CRASHED = True
 
 class Food(Cube):
     def __init__(self, x, y, vx, vy, color, eaten):
@@ -69,8 +75,8 @@ class Food(Cube):
         self.color = color
         self.eaten = eaten
     def draw(self):
-        global win
-        pygame.draw.rect(win, self.color, rect(self.x, self.y))
+        global WIN
+        pygame.draw.rect(WIN, self.color, rect(self.x, self.y))
 
     def is_eaten(self, other):
         if self.x == other.x and self.y == other.y:
@@ -82,11 +88,11 @@ snake.draw()
 food = Food(convert(16), convert(17), 0, 0, (0, 255, 0), False)
 food.draw()
 i = len(snake.snakeBody) - 1
-while not crashed:
+while not CRASHED:
     clock.tick(15)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            crashed = True
+            CRASHED = True
     snake.erase()
     food.is_eaten(snake.snakeBody[0])
     if food.eaten == True:
@@ -100,7 +106,7 @@ while not crashed:
         
         for i in range(20):
             for j in range(20):
-                if (i, j) not in [(snake.snakeBody[k].x/gridWidth, snake.snakeBody[k].y/gridWidth) for k in range(len(snake.snakeBody))]:
+                if (i, j) not in [(snake.snakeBody[k].x/GRIDWIDTH, snake.snakeBody[k].y/GRIDWIDTH) for k in range(len(snake.snakeBody))]:
                     available.append((convert(i), convert(j)))
         idx = np.random.randint(len(available) - 1)
 
