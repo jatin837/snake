@@ -1,5 +1,7 @@
 import pygame
+import os
 import numpy as np
+import json
 
 pygame.init
 
@@ -20,6 +22,10 @@ rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
 
 AVAILABLE:list = []
 clock = pygame.time.Clock()
+
+def _add_data(headPos, foodPos, length, direction, status):
+    DATA_FILE:str = os.path.abspath('./snake.dat.json')
+    json.loads(DATA_FILE)
 
 class Body:
     def __init__(self, x, y, vx, vy):
