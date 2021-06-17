@@ -12,6 +12,8 @@ DISPLAY_HEIGHT:int = 500
 
 WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
+vel_to_str = lambda x, y : f'{i_convert(x)}, {i_convert(y)}'
+
 INIT_SNAKE_HEAD_COORDINATE:list = [15, 2]
 INIT_SNAKE_HEAD_VELOCITY:list = [1, 0]
 INIT_SNAKE_LENGTH:int = 8 
@@ -48,12 +50,22 @@ class Body:
         self.vy = vy
 
 class Snake:
+    DIRECTION = {
+        '0, 1': "D",
+        '1, 0': "R",
+        '-1, 0': "L",
+        '0, -1': "U",
+    }
     def __init__(self, x, y, vx, vy, length):
         self.turningPoints = []
         self.snakeBody = [Body(convert(x - i), convert(y), convert(vx), convert(vy)) for i in range(length)]
     
     def get_len(self):
         return len(self.snakeBody)
+
+    @staticmethod 
+    def get_direction(direction):
+        return Snake.DIRECTION[direction] 
 
     def changeDirection(self, i, direction):
         if direction == 'D':
@@ -170,6 +182,7 @@ def main():
         snake.draw()
         print(f"points:{snake.get_len() -INIT_SNAKE_LENGTH}")
         pygame.display.update()
+        _add_data(head_pos = [snake.snakeBody[0].x, snake.snakeBody[0].y], food_pos = [food.x, food.y], current_direction = Snake.get_direction(vel_to_str(snake.snakeBody[1].vx, snake.snakeBody[1].vy)), length = snake.get_len(), next_direction = Snake.get_direction(vel_to_str(snake.snakeBody[0].vx, snake.snakeBody[0].vy)), status = CRASHED)
     pygame.quit()
     print('well played')
 
