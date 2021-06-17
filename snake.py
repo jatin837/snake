@@ -68,7 +68,7 @@ class Snake:
         elif direction == 'L':
             self.snakeBody[i].vx = convert(-1)
             self.snakeBody[i].vy = convert(0)
-        if i == len(self.snakeBody) - 1:
+        if i == self.get_len() - 1:
             del(self.turningPoints[0])
     def draw(self):
         global WIN
@@ -142,7 +142,7 @@ def main():
             
             for i in range(20):
                 for j in range(20):
-                    if (i, j) not in [(i_convert(snake.snakeBody[k].x), i_convert(snake.snakeBody[k].y)) for k in range(len(snake.snakeBody))]:
+                    if (i, j) not in [(i_convert(snake.snakeBody[k].x), i_convert(snake.snakeBody[k].y)) for k in range(snake.get_len())]:
                         AVAILABLE.append((convert(i), convert(j)))
             idx = np.random.randint(len(AVAILABLE) - 1)
 
@@ -166,7 +166,7 @@ def main():
 
         snake.update_pos()
         snake.draw()
-        print(f"points:{len(snake.snakeBody)-INIT_SNAKE_LENGTH}")
+        print(f"points:{snake.get_len() -INIT_SNAKE_LENGTH}")
         pygame.display.update()
     pygame.quit()
     print('well played')
