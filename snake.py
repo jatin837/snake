@@ -7,7 +7,7 @@ pygame.init
 
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
-DISPLAY_WIDTH:int = 500
+DISPLAY_WIDTH:int = 800
 DISPLAY_HEIGHT:int = 500
 
 WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -99,25 +99,26 @@ class Snake:
         global WIN
         for part in self.snakeBody:
             pygame.draw.rect(WIN, BLACK, rect(part.x, part.y))
+
     def update_pos(self):
         global DISPLAY_WIDTH
+        global DISPLAY_HEIGHT
         global CRASHED
-        for i, c in enumerate(self.snakeBody):
+        for indx, body in enumerate(self.snakeBody):
             for tp in self.turningPoints:
-                if c.x == tp['x'] and c.y == tp['y']:
-                    self.changeDirection(i, tp['direction'])
-            c.x += c.vx
-            c.y += c.vy
-            if c.x == convert(20):
-                c.x = 0
-            elif c.x == convert(-1):
-                c.x = convert(19)
-            elif c.y == convert(-1):
-                c.y = convert(19)
-            elif c.y == convert(20):
-                c.y = convert(0)
-            if i > 0 and c.x == self.snakeBody[0].x and c.y == self.snakeBody[0].y:
-
+                if body.x == tp['x'] and body.y == tp['y']:
+                    self.changeDirection(indx, tp['direction'])
+            body.x += body.vx
+            body.y += body.vy
+            if body.x == convert(i_convert(DISPLAY_WIDTH)):
+                body.x = 0
+            elif body.x == convert(-1):
+                body.x = convert(i_convert(DISPLAY_WIDTH) - 1)
+            elif body.y == convert(-1):
+                body.y = convert(i_convert(DISPLAY_HEIGHT) - 1)
+            elif body.y == convert(i_convert(DISPLAY_HEIGHT)):
+                body.y = convert(0)
+            if indx > 0 and body.x == self.snakeBody[0].x and body.y == self.snakeBody[0].y:
                 CRASHED = True
 
 class Food(Body):
@@ -182,7 +183,7 @@ def main():
         snake.draw()
         print(f"points:{snake.get_len() -INIT_SNAKE_LENGTH}")
         pygame.display.update()
-        _add_data(head_pos = [snake.snakeBody[0].x, snake.snakeBody[0].y], food_pos = [food.x, food.y], current_direction = Snake.get_direction(vel_to_str(snake.snakeBody[1].vx, snake.snakeBody[1].vy)), length = snake.get_len(), next_direction = Snake.get_direction(vel_to_str(snake.snakeBody[0].vx, snake.snakeBody[0].vy)), status = CRASHED)
+        #_add_data(head_pos = [snake.snakeBody[0].x, snake.snakeBody[0].y], food_pos = [food.x, food.y], current_direction = Snake.get_direction(vel_to_str(snake.snakeBody[1].vx, snake.snakeBody[1].vy)), length = snake.get_len(), next_direction = Snake.get_direction(vel_to_str(snake.snakeBody[0].vx, snake.snakeBody[0].vy)), status = CRASHED)
     pygame.quit()
     print('well played')
 
