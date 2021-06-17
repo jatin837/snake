@@ -5,10 +5,11 @@ import json
 
 pygame.init
 
+GRIDWIDTH:int = 10
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
-DISPLAY_WIDTH:int = 800
-DISPLAY_HEIGHT:int = 500
+DISPLAY_WIDTH:int = 60*GRIDWIDTH
+DISPLAY_HEIGHT:int = 50*GRIDWIDTH
 
 WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
@@ -18,7 +19,6 @@ INIT_SNAKE_HEAD_COORDINATE:list = [15, 2]
 INIT_SNAKE_HEAD_VELOCITY:list = [1, 0]
 INIT_SNAKE_LENGTH:int = 8 
 CRASHED:bool = False
-GRIDWIDTH:int = 25
 
 convert = lambda x: int(x*GRIDWIDTH) # convert coordinate into grid location
 i_convert = lambda x: int(x/GRIDWIDTH) # inverse of convert function
@@ -155,16 +155,17 @@ def main():
         if food.eaten == True:
             snake.append_body() 
             
-            for i in range(i_convert(DISPLAY_HEIGHT)):
-                for j in range(i_convert(DISPLAY_WIDTH)):
+            for i in range(i_convert(DISPLAY_WIDTH)):
+                for j in range(i_convert(DISPLAY_HEIGHT)):
                     if (i, j) not in [(i_convert(snake.snakeBody[k].x), i_convert(snake.snakeBody[k].y)) for k in range(snake.get_len())]:
-                        AVAILABLE.append((convert(i), convert(j)))
+                        AVAILABLE.append([i, j])
+
             idx = np.random.randint(len(AVAILABLE) - 1)
 
-            food.x , food.y = AVAILABLE[idx]
+            food.x , food.y = list(map(convert, AVAILABLE[idx]))
             food.eaten = False
             food.draw()
-            AVAILABLE = []
+            AVAILABLE.clear()
 
 
         keys = pygame.key.get_pressed()
