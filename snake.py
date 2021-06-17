@@ -12,6 +12,9 @@ DISPLAY_HEIGHT:int = 500
 
 WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
+INIT_SNAKE_HEAD_COORDINATE:list = [15, 2]
+INIT_SNAKE_HEAD_VELOCITY:list = [1, 0]
+INIT_SNAKE_LENGTH:int = 8 
 CRASHED:bool = False
 GRIDWIDTH:int = 25
 
@@ -45,9 +48,13 @@ class Body:
         self.vy = vy
 
 class Snake:
-    def __init__(self):
+    def __init__(self, x, y, vx, vy, length):
         self.turningPoints = []
-        self.snakeBody = [Body(convert(15 - i), convert(2), convert(1), convert(0)) for i in range(2)]
+        self.snakeBody = [Body(convert(x - i), convert(y), convert(vx), convert(vy)) for i in range(length)]
+    
+    def get_len(self):
+        return len(self.snakeBody)
+
     def changeDirection(self, i, direction):
         if direction == 'D':
             self.snakeBody[i].vx = convert(0)
@@ -107,13 +114,16 @@ class Food(Body):
             self.eaten = True
       
 def main():
+    global INIT_SNAKE_HEAD_COORDINATE
+    global INIT_SNAKE_HEAD_VELOCITY
+    global INIT_SNAKE_LENGTH
+  
     global CRASHED
     global AVAILABLE
-    snake = Snake()
-    snake.draw()
+    snake = Snake(INIT_SNAKE_HEAD_COORDINATE[0], INIT_SNAKE_HEAD_COORDINATE[1], INIT_SNAKE_HEAD_VELOCITY[0], INIT_SNAKE_HEAD_VELOCITY[1], INIT_SNAKE_LENGTH)
     food = Food(convert(16), convert(17), 0, 0, (0, 255, 0), False)
     food.draw()
-    i = len(snake.snakeBody) - 1
+    i:int = INIT_SNAKE_LENGTH - 1
     while not CRASHED:
         clock.tick(15)
         for event in pygame.event.get():
@@ -123,10 +133,10 @@ def main():
         food.is_eaten(snake.snakeBody[0])
         if food.eaten == True:
             
-            x = snake.snakeBody[len(snake.snakeBody) - 1].x
-            y = snake.snakeBody[len(snake.snakeBody) - 1].y
-            vx = snake.snakeBody[len(snake.snakeBody) - 1].vx
-            vy = snake.snakeBody[len(snake.snakeBody) - 1].vy
+            x = snake.snakeBody[snake.get_len() - 1].x
+            y = snake.snakeBody[snake.get_len() - 1].y
+            vx = snake.snakeBody[snake.get_len() - 1].vx
+            vy = snake.snakeBody[snake.get_len() - 1].vy
             snake.snakeBody.append(Body(x-vx, y-vy, vx, vy))
 
             
@@ -156,7 +166,7 @@ def main():
 
         snake.update_pos()
         snake.draw()
-        print(f"points:{len(snake.snakeBody)-2}")
+        print(f"points:{len(snake.snakeBody)-INIT_SNAKE_LENGTH}")
         pygame.display.update()
     pygame.quit()
     print('well played')
