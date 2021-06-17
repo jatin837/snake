@@ -18,8 +18,8 @@ INIT_SNAKE_LENGTH:int = 8
 CRASHED:bool = False
 GRIDWIDTH:int = 25
 
-convert = lambda x: x*GRIDWIDTH # convert coordinate into grid location
-i_convert = lambda x: x/GRIDWIDTH # inverse of convert function
+convert = lambda x: int(x*GRIDWIDTH) # convert coordinate into grid location
+i_convert = lambda x: int(x/GRIDWIDTH) # inverse of convert function
 
 rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
 
@@ -74,6 +74,14 @@ class Snake:
         global WIN
         for part in self.snakeBody:
             pygame.draw.rect(WIN, RED, rect(part.x, part.y))
+
+    def append_body(self):
+            temp_x = self.snakeBody[self.get_len() - 1].x
+            temp_y = self.snakeBody[self.get_len() - 1].y
+            temp_vx = self.snakeBody[self.get_len() - 1].vx
+            temp_vy = self.snakeBody[self.get_len() - 1].vy
+            self.snakeBody.append(Body(temp_x-temp_vx, temp_y-temp_vy, temp_vx, temp_vy))
+
             
     def erase(self):
         global WIN
@@ -132,16 +140,10 @@ def main():
         snake.erase()
         food.is_eaten(snake.snakeBody[0])
         if food.eaten == True:
+            snake.append_body() 
             
-            x = snake.snakeBody[snake.get_len() - 1].x
-            y = snake.snakeBody[snake.get_len() - 1].y
-            vx = snake.snakeBody[snake.get_len() - 1].vx
-            vy = snake.snakeBody[snake.get_len() - 1].vy
-            snake.snakeBody.append(Body(x-vx, y-vy, vx, vy))
-
-            
-            for i in range(20):
-                for j in range(20):
+            for i in range(i_convert(DISPLAY_HEIGHT)):
+                for j in range(i_convert(DISPLAY_WIDTH)):
                     if (i, j) not in [(i_convert(snake.snakeBody[k].x), i_convert(snake.snakeBody[k].y)) for k in range(snake.get_len())]:
                         AVAILABLE.append((convert(i), convert(j)))
             idx = np.random.randint(len(AVAILABLE) - 1)
