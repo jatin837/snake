@@ -1,9 +1,4 @@
 import pygame
-<<<<<<< HEAD
-from body import Body
-from helper import *
-
-=======
 import os
 import numpy as np
 import json
@@ -53,7 +48,6 @@ class Body:
         self.y = y
         self.vx = vx
         self.vy = vy
->>>>>>> old
 
 class Snake:
     DIRECTION = {
@@ -127,9 +121,6 @@ class Snake:
             if indx > 0 and body.x == self.snakeBody[0].x and body.y == self.snakeBody[0].y:
                 CRASHED = True
 
-<<<<<<< HEAD
-     
-=======
 class Food(Body):
     def __init__(self, x, y, vx, vy, color, eaten):
         super().__init__(x, y, vx, vy)
@@ -199,4 +190,3 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> old
