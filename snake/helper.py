@@ -13,7 +13,7 @@ GRIDWIDTH:int = 25
 
 
 AVAILABLE:list = []
-clock = pygame.time.Clock()
+clock:any = pygame.time.Clock()
 
 
 convert = lambda x: x*GRIDWIDTH # convert coordinate into grid location

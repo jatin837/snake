@@ -4,3 +4,6 @@ class Body:
         self.y = y
         self.vx = vx
         self.vy = vy
+
+def sumthign(solid):
+    pass
