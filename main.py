@@ -100,8 +100,9 @@ class Snake:
             del(self.turningPoints[0])
     def draw(self):
         global WIN
-        for part in self.snakeBody:
-            pygame.draw.rect(WIN, RED, rect(part.x, part.y))
+        pygame.draw.rect(WIN, RED, rect(self.snakeBody[0].x, self.snakeBody[0].y))
+        for part in self.snakeBody[1:]:
+            pygame.draw.rect(WIN, WHITE, rect(part.x, part.y))
 
     def append_body(self):
             temp_x = self.snakeBody[self.get_len() - 1].x
