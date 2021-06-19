@@ -3,7 +3,9 @@ import os
 import numpy as np
 import json
 
-pygame.init
+pygame.font.init() 
+myfont = pygame.font.SysFont('Comic Sans MS', 50)
+
 
 GRIDWIDTH:int = 10
 
@@ -21,11 +23,13 @@ BLACK:tuple = (0, 0, 0)
 WHITE:tuple = (255, 255, 255)
 YELLOW:tuple = (255, 255, 153)
 
+
 SCORE_WIDTH:int = convert(SCORE_WIDTH_PX) 
 DISPLAY_WIDTH:int = convert(DISPLAY_WIDTH_PX)
 DISPLAY_HEIGHT:int = convert(DISPLAY_HEIGHT_PX)
 
 WIN:any = pygame.display.set_mode((DISPLAY_WIDTH + SCORE_WIDTH, DISPLAY_HEIGHT))
+
 
 vel_to_str = lambda x, y : f'{i_convert(x)}, {i_convert(y)}'
 
@@ -154,12 +158,15 @@ class Score_Board(object):
         self.WIDTH = SCORE_WIDTH_PX
         self.HEIGHT = DISPLAY_HEIGHT_PX
         print(self.x, self.y)
+    def get_score(self):
+        return myfont.render(f'{self.value}', False, BLACK)                   
     def update(self):
         self.value += 1
     def draw(self):
         global WIN
+        global textsurface
         pygame.draw.rect(WIN, WHITE, rect(self.x, self.y, self.WIDTH, self.HEIGHT))
-        print(f'drawing {RED} at {self.x}, {self.y}')
+        WIN.blit(self.get_score(),(DISPLAY_WIDTH + SCORE_WIDTH//8, DISPLAY_HEIGHT//2))
     def __str__(self):
         return f"score = {self.value}"
       
