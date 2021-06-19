@@ -6,12 +6,25 @@ import json
 pygame.init
 
 GRIDWIDTH:int = 10
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
-DISPLAY_WIDTH:int = 60*GRIDWIDTH
-DISPLAY_HEIGHT:int = 50*GRIDWIDTH
 
-WIN:any = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+convert = lambda x: int(x*GRIDWIDTH) # convert coordinate into grid location
+i_convert = lambda x: int(x/GRIDWIDTH) # inverse of convert function
+
+SCORE_WIDTH_PX:int = 10
+DISPLAY_WIDTH_PX:int = 60
+DISPLAY_HEIGHT_PX:int = 50
+
+RED:tuple = (255, 0, 0)
+GREEN:tuple = (0, 255, 0)
+BLUE:tuple = (0, 0, 255)
+BLACK:tuple = (0, 0, 0)
+WHITE:tuple = (255, 255, 255)
+
+SCORE_WIDTH:int = convert(SCORE_WIDTH_PX) 
+DISPLAY_WIDTH:int = convert(DISPLAY_WIDTH_PX)
+DISPLAY_HEIGHT:int = convert(DISPLAY_HEIGHT_PX)
+
+WIN:any = pygame.display.set_mode((DISPLAY_WIDTH + SCORE_WIDTH, DISPLAY_HEIGHT))
 
 vel_to_str = lambda x, y : f'{i_convert(x)}, {i_convert(y)}'
 
@@ -20,8 +33,6 @@ INIT_SNAKE_HEAD_VELOCITY:list = [1, 0]
 INIT_SNAKE_LENGTH:int = 8 
 CRASHED:bool = False
 
-convert = lambda x: int(x*GRIDWIDTH) # convert coordinate into grid location
-i_convert = lambda x: int(x/GRIDWIDTH) # inverse of convert function
 
 rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
 
