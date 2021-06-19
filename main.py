@@ -19,6 +19,7 @@ GREEN:tuple = (0, 255, 0)
 BLUE:tuple = (0, 0, 255)
 BLACK:tuple = (0, 0, 0)
 WHITE:tuple = (255, 255, 255)
+YELLOW:tuple = (255, 255, 153)
 
 SCORE_WIDTH:int = convert(SCORE_WIDTH_PX) 
 DISPLAY_WIDTH:int = convert(DISPLAY_WIDTH_PX)
@@ -34,7 +35,7 @@ INIT_SNAKE_LENGTH:int = 8
 CRASHED:bool = False
 
 
-rect = lambda x, y: pygame.Rect(x, y, GRIDWIDTH, GRIDWIDTH)
+rect = lambda x, y, i = 1, j = 1: pygame.Rect(x, y, convert(i), convert(j))
 
 AVAILABLE:list = []
 clock = pygame.time.Clock()
@@ -144,16 +145,41 @@ class Food(Body):
     def is_eaten(self, other):
         if self.x == other.x and self.y == other.y:
             self.eaten = True
+
+class Score_Board(object):
+    def __init__(self):
+        self.value = 0
+        self.x = DISPLAY_WIDTH
+        self.y = 0
+        self.WIDTH = SCORE_WIDTH_PX
+        self.HEIGHT = DISPLAY_HEIGHT_PX
+        print(self.x, self.y)
+    def update(self):
+        self.value += 1
+    def draw(self):
+        global WIN
+        pygame.draw.rect(WIN, WHITE, rect(self.x, self.y, self.WIDTH, self.HEIGHT))
+        print(f'drawing {RED} at {self.x}, {self.y}')
+    def __str__(self):
+        return f"score = {self.value}"
       
 def main():
     global INIT_SNAKE_HEAD_COORDINATE
     global INIT_SNAKE_HEAD_VELOCITY
     global INIT_SNAKE_LENGTH
+    global BLUE
+    global RED
+    global GREEN
+    global SCORE_WIDTH
+    global DISPLAY_HEIGHT
   
     global CRASHED
     global AVAILABLE
+
     snake = Snake(INIT_SNAKE_HEAD_COORDINATE[0], INIT_SNAKE_HEAD_COORDINATE[1], INIT_SNAKE_HEAD_VELOCITY[0], INIT_SNAKE_HEAD_VELOCITY[1], INIT_SNAKE_LENGTH)
-    food = Food(convert(16), convert(17), 0, 0, (0, 255, 0), False)
+    food = Food(convert(16), convert(17), 0, 0, GREEN, False)
+    board = Score_Board()
+    board.draw()
     food.draw()
     i:int = INIT_SNAKE_LENGTH - 1
     while not CRASHED:
@@ -165,6 +191,7 @@ def main():
         food.is_eaten(snake.snakeBody[0])
         if food.eaten == True:
             snake.append_body() 
+            board.update()
             
             for i in range(i_convert(DISPLAY_WIDTH)):
                 for j in range(i_convert(DISPLAY_HEIGHT)):
@@ -193,7 +220,8 @@ def main():
 
         snake.update_pos()
         snake.draw()
-        print(f"points:{snake.get_len() -INIT_SNAKE_LENGTH}")
+        board.draw()
+        print(board)
         pygame.display.update()
         #_add_data(head_pos = [snake.snakeBody[0].x, snake.snakeBody[0].y], food_pos = [food.x, food.y], current_direction = Snake.get_direction(vel_to_str(snake.snakeBody[1].vx, snake.snakeBody[1].vy)), length = snake.get_len(), next_direction = Snake.get_direction(vel_to_str(snake.snakeBody[0].vx, snake.snakeBody[0].vy)), status = CRASHED)
     pygame.quit()
